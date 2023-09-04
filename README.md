@@ -38,12 +38,12 @@ Before diving headfirst into the world of **AgentX**, here's a checklist of prer
    ```bash
    git clone https://github.com/OpenAgentX/AgentX.git
    cd AgentX
+   export OPENAI_API_KEY='sk-your-openapi-key'
    cargo run -- -i "your task description"    
    ```
 
     **For example, you can execute the following command:**
     ```bash
-
     cargo run -- -i "Creating a snake game using python"  
     ```
 4. **Adhere to the Setup Instructions Provided by the Script** - 
@@ -68,13 +68,13 @@ Following agent are implemented.
 
 ## 🎉 Roadmap
 
-While **AgentX** currently resides in the realm of beta, our comprehensive **[public roadmap](https://github.com/OpenAgentX/AgentX/docs/ROADMAP.md)** outlines both achieved milestones and exciting future endeavors.
+While **AgentX** currently resides in the realm of beta, our comprehensive **[public roadmap](https://github.com/OpenAgentX/AgentX/blob/main/docs/ROADMAP.md)** outlines both achieved milestones and exciting future endeavors.
 
 
 ## 🚀 Tech Stack
 
 - ✅ **Rust**: [rust-lang](https://rust-lang.org) A language that empowers individuals to craft reliable and high-performance software.
-- ✅ **OpenAi**:🗃️ GPT instances for text generation
+- ✅ **OpenAI**:🗃️ GPT instances for text generation
 
 ## ✨ Demo 🚧
 For the most immersive demo experience, we invite you to explore [our dedicated site]() directly :)🚧

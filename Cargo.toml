@@ -32,7 +32,9 @@ agentx_core.workspace = true
 # agent_prompts.workspace = true
 
 # for logging
+# chrono.workspace = true
 tracing.workspace = true
+# tracing-appender.workspace = true
 tracing-subscriber.workspace = true
 
 async-openai.workspace = true
@@ -91,7 +93,9 @@ async-trait = "0.1.73"
 tokio = { version = "1.31.0", features = ["full"] }
 
 # for logging
+# chrono = "0.4.28"
 tracing = "0.1"
+# tracing-appender = "0.2"
 tracing-subscriber = { version = "0.3", features = ["local-time"] }
 
 # for chatgpt 
