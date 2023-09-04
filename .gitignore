@@ -1,0 +1,7 @@
+/target
+/logs
+/tests
+/examples
+/workshop
+*.py
+*.yaml
