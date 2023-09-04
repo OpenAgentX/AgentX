@@ -46,10 +46,6 @@ reqwest.workspace = true
 resolver = "2"
 members = [
   "crates/*",
-  "examples/*",
-  # "docs/code-examples",
-  "researcher",
-  # "tests/rust/*",
 ]
 
 [workspace.package]
@@ -65,7 +61,6 @@ version = "0.1.0"
 
 [workspace.dependencies]
 agent_macro =          { path = "crates/agent_macro", version = "*", default-features = false }
-agent_roles_derive =   { path = "crates/agent_roles_derive", version = "*", default-features = false }
 agent_actions =        { path = "crates/agent_actions", version = "*", default-features = false }
 agent_document_store = { path = "crates/agent_document_store", version = "*", default-features = false }
 agent_environment =    { path = "crates/agent_environment", version = "*", default-features = false }

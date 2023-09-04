@@ -11,7 +11,7 @@ agent_schema.workspace = true
 agent_memory.workspace = true
 agent_provider.workspace = true
 # 用户生成 role 
-agent_roles_derive.workspace = true
+# agent_roles_derive.workspace = true
 agent_macro.workspace = true
 
 # for role async-trait
