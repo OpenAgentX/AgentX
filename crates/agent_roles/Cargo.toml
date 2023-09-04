@@ -1,0 +1,23 @@
+[package]
+name = "agent_roles"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+agent_actions.workspace = true
+agent_schema.workspace = true
+agent_memory.workspace = true
+agent_provider.workspace = true
+# 用户生成 role 
+agent_roles_derive.workspace = true
+agent_macro.workspace = true
+
+# for role async-trait
+async-trait.workspace = true
+# termimad.workspace = true
+
+# for logging
+tracing.workspace = true
+tracing-subscriber.workspace = true

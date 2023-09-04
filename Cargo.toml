@@ -1,0 +1,123 @@
+[package]
+name = "agentx"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "4.3.21", features = ["derive"] }
+config.workspace = true
+anyhow.workspace = true
+tokio.workspace = true
+serde_yaml.workspace = true
+regex.workspace = true
+rust_mermaid.workspace = true
+
+agent_actions.workspace = true
+agent_document_store.workspace = true
+agent_environment.workspace = true
+agent_learn.workspace = true
+agent_management.workspace = true
+agent_memory.workspace = true
+agent_prompts.workspace = true
+agent_provider.workspace = true
+agent_roles.workspace = true
+agent_schema.workspace = true
+agent_tools.workspace = true
+agent_utils.workspace = true
+agentx_core.workspace = true
+
+# agent_prompts.workspace = true
+
+# for logging
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+async-openai.workspace = true
+futures.workspace = true
+
+# test examples
+arxiv-rs.workspace = true
+reqwest.workspace = true
+
+[workspace]
+resolver = "2"
+members = [
+  "crates/*",
+  "examples/*",
+  # "docs/code-examples",
+  "researcher",
+  # "tests/rust/*",
+]
+
+[workspace.package]
+authors = ["AgentX.life <sxhxliang@gmail.com>"]
+edition = "2021"
+homepage = "https://agentx.life"
+# include = ["../../LICENSE-APACHE", "../../LICENSE-MIT", "**/*.rs", "Cargo.toml"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/sxhxliang/agentx.life"
+rust-version = "1.70"
+version = "0.1.0"
+
+
+[workspace.dependencies]
+agent_macro =          { path = "crates/agent_macro", version = "*", default-features = false }
+agent_roles_derive =   { path = "crates/agent_roles_derive", version = "*", default-features = false }
+agent_actions =        { path = "crates/agent_actions", version = "*", default-features = false }
+agent_document_store = { path = "crates/agent_document_store", version = "*", default-features = false }
+agent_environment =    { path = "crates/agent_environment", version = "*", default-features = false }
+agent_learn =          { path = "crates/agent_learn", version = "*", default-features = false }
+agent_management =     { path = "crates/agent_management", version = "*", default-features = false }
+agent_memory =         { path = "crates/agent_memory", version = "*", default-features = false }
+agent_prompts =        { path = "crates/agent_prompts", version = "*", default-features = false }
+agent_provider =       { path = "crates/agent_provider", version = "*", default-features = false }
+agent_roles =          { path = "crates/agent_roles", version = "*", default-features = false }
+agent_schema =         { path = "crates/agent_schema", version = "*", default-features = false }
+agent_tools =          { path = "crates/agent_tools", version = "*", default-features = false }
+agent_utils =          { path = "crates/agent_utils", version = "*", default-features = false }
+agentx_core =          { path = "crates/agentx", version = "*", default-features = false }
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+config = "0.13.3"
+
+derivative = "2.2.0"
+
+regex = "1.9.3"
+lazy_static = "1.4.0"
+futures ="0.3.26"
+anyhow = "1.0"
+async-trait = "0.1.73"
+tokio = { version = "1.31.0", features = ["full"] }
+
+# for logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["local-time"] }
+
+# for chatgpt 
+async-openai = "0.13.1"
+
+# for action
+readability = "0.2.0"
+rust_mermaid = "0.1.1"
+base64 = "0.21.2"
+reqwest = {version = "0.11.18", features = ["blocking"]}
+image = "0.24.6"
+arxiv-rs = "0.1.5"
+
+termimad = "0.20"
+
+[profile.release]
+# https://github.com/johnthagen/min-sized-rust
+strip = true  # Automatically strip symbols from the binary.
+opt-level = "z"  # Optimize for size.
+lto = true
+codegen-units = 1
+panic = "abort"
+# indicatif
+# # When using alpha-release, always use exact version, e.g. `version = "=0.x.y-alpha.z"
+# # This is because we treat alpha-releases as incompatible, but semver doesn't.
+# # In particular: if we compile AICommander 0.3.0-alpha.0 we only want it to use

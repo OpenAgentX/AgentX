@@ -1,0 +1,20 @@
+[package]
+name = "agent_actions"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tracing.workspace = true
+
+async-trait.workspace = true
+readability.workspace = true
+termimad.workspace = true
+
+agent_schema.workspace = true
+agent_macro.workspace = true
+agent_provider.workspace = true
+agent_prompts.workspace = true
+agent_tools.workspace = true
+agent_utils.workspace = true
