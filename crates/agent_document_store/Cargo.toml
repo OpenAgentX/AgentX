@@ -1,13 +1,8 @@
 [package]
-name = "agent_environment"
+name = "agent_document_store"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-agent_schema.workspace = true
-agent_memory.workspace = true
-agent_roles.workspace = true
-
-tracing.workspace = true

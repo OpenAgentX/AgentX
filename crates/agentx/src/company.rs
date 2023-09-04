@@ -3,8 +3,8 @@ use agent_roles::Role;
 use agent_schema::Message;
 use tracing::{debug, info};
 
-use  crate::config::Config;
-use crate::environment::Environment;
+use agent_environment::Environment;
+use crate::config::Config;
 
 pub struct SoftwareCompany {
     environment: Environment,

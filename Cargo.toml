@@ -20,6 +20,7 @@ agent_environment.workspace = true
 agent_learn.workspace = true
 agent_management.workspace = true
 agent_memory.workspace = true
+agent_planing.workspace = true
 agent_prompts.workspace = true
 agent_provider.workspace = true
 agent_roles.workspace = true
@@ -71,6 +72,7 @@ agent_environment =    { path = "crates/agent_environment", version = "*", defau
 agent_learn =          { path = "crates/agent_learn", version = "*", default-features = false }
 agent_management =     { path = "crates/agent_management", version = "*", default-features = false }
 agent_memory =         { path = "crates/agent_memory", version = "*", default-features = false }
+agent_planing =        { path = "crates/agent_planing", version = "*", default-features = false }
 agent_prompts =        { path = "crates/agent_prompts", version = "*", default-features = false }
 agent_provider =       { path = "crates/agent_provider", version = "*", default-features = false }
 agent_roles =          { path = "crates/agent_roles", version = "*", default-features = false }
