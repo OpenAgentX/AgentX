@@ -1,8 +1,11 @@
 #[warn(unused_imports)]
+use std::path::PathBuf;
 
 use anyhow::Result;
+use clap::builder::TypedValueParser as _;
 use clap::Parser;
-use tracing::{info, Level};
+
+use tracing::info;
 use tracing_subscriber::fmt::time;
 
 use agentx_core::SoftwareCompany;
@@ -43,9 +46,15 @@ async fn startup(
     long_about=None
 )]
 struct Args {
+    /// Sets a custom config file
+    #[arg(short, long, value_name = "FILE")]
+    config: Option<PathBuf>,
     /// Your innovative task, such as 'Creating a snake game.'
     #[arg(short, long)]
     idea: String,
+    /// Agent Name
+    #[arg(short, long, default_value_t = String::from("MetaGPT"))]
+    agent: String,
     /// Investment amount
     #[arg(short, long, default_value_t = 3.0)]
     startup_investment: f64,
@@ -54,26 +63,34 @@ struct Args {
     n_round: i32,
     /// Enable code review
     #[arg(short, long)]
-    code_review: bool,
+    review: bool,
     /// Run tests during development
     #[arg(short, long)]
-    run_tests: bool,
+    tests: bool,
+    /// Support enums from a foreign crate that don't implement `ValueEnum`
+    #[arg(
+        short,
+        long,
+        default_value_t = tracing::Level::INFO,
+        value_parser = clap::builder::PossibleValuesParser::new(["TRACE", "DEBUG", "INFO", "WARN", "ERROR"])
+            .map(|s| s.parse::<tracing::Level>().unwrap()),
+    )]
+    log_level: tracing::Level,
 }
 
 #[tokio::main]
 async fn main() {
 
+    let args = Args::parse();
 
     tracing_subscriber::fmt()
         // enable everything
-        .with_max_level(tracing::Level::INFO)
+        .with_max_level(args.log_level)
         .with_timer(time::LocalTime::rfc_3339())
         // sets this to be the default, global collector for this application.
         .init();
 
-    let args = Args::parse();
-    info!("Hello {}!", args.idea);
+    info!("Hello, use {} for {}!", args.agent, args.idea);
 
-
-    let _ = startup(args.idea, args.startup_investment, args.n_round, args.code_review, args.run_tests).await;
+    let _ = startup(args.idea, args.startup_investment, args.n_round, args.review, args.tests).await;
 }
