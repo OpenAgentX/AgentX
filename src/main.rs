@@ -4,6 +4,7 @@ use std::path::PathBuf;
 use anyhow::Result;
 use clap::builder::TypedValueParser as _;
 use clap::Parser;
+use dotenv::dotenv;
 
 use tracing::info;
 use tracing_subscriber::fmt::time;
@@ -80,7 +81,7 @@ struct Args {
 
 #[tokio::main]
 async fn main() {
-
+    dotenv().ok();
     let args = Args::parse();
 
     tracing_subscriber::fmt()

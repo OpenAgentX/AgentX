@@ -33,8 +33,8 @@ impl LLMBase for OpenAIGPTAPI {
     async fn aask(&self, msg: String) -> String {
         // debug!("OpenAIGPTAPI msg: {}", msg);
         debug!("chat with OpenAIGPTAPI...");
-        let data = self.aask(&msg).await;
-        data.unwrap_or("".into())
+        let data = self.aask(&msg).await.expect("msg is not a message");
+        data
     }
 }
 
@@ -54,7 +54,7 @@ impl OpenAIGPTAPI {
     pub async fn aask(&self, content: &str) -> Result<String, Box<dyn Error>> {
         
         let request = CreateChatCompletionRequestArgs::default()
-            .model("gpt-3.5-turbo")
+            .model(std::env::var("OPENAI_API_MODEL").unwrap_or("gpt-3.5-turbo".to_string()))
             // .max_tokens(4096u16)
             .messages([ChatCompletionRequestMessageArgs::default()
                 .content(content)
