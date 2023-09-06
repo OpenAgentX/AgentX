@@ -31,7 +31,7 @@ impl Action for BossRequirement {
         "BossRequirement".to_owned()
     }
 
-    async fn run(&self, _prompt: Vec<Message>)-> String {
+    async fn run(&self, _prompt: Vec<&Message>)-> String {
         "BossRequirement".to_owned()
     }
 }

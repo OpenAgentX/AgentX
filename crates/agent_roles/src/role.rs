@@ -70,7 +70,20 @@ impl RoleContext {
     /// Finally, it returns the msg_data vector.
     pub fn important_memory(self) -> Vec<Message>{
         let role_memory = self.role_memory.lock().unwrap();
-        let msgs = role_memory.get(0).clone();
+        let msgs = role_memory.get(0);
+
+        let mut msg_data = Vec::new();
+        for msg in msgs.iter() {
+            let msg: Message = msg.to_owned().clone();
+            msg_data.push(msg);
+        }
+        // debug!("important_memory: {:?}", msg_data);
+        msg_data
+    }
+
+    pub fn get_env_memory(self) -> Vec<Message>{
+        let env_memory = self.env_memory.lock().unwrap();
+        let msgs = env_memory.get(0);
 
         let mut msg_data = Vec::new();
         for msg in msgs.iter() {
@@ -114,7 +127,10 @@ pub trait Role: Send + Sync {
     fn _get_action_by_state(&self, state: usize) -> Option<&Box<dyn Action>>;
     /// Get the count of actions for the role.
     fn _get_action_count(&self) -> usize;
+    ///  
+    fn _before_action(&self, env_msgs: &Vec<Message>,  role_msgs: &Vec<Message>) -> String;
 
+    fn _after_action(&self, message: Message) -> Message;
 
 // -------------------------------------------------------------------------------
 // --------------------- 下面是每个Agent通用的运行逻辑 -------------------------------
@@ -207,14 +223,20 @@ pub trait Role: Send + Sync {
 
     /// Think first (_think) and then act.
     async fn _execute_next_action(&self, action_state: usize) -> Message {
-        let important_memory = self._get_rc().clone().important_memory();
+        // let important_memory;
+        // let env_msgs;
+        // {
+        let role_msgs = self._get_rc().clone().important_memory();
+        let env_msgs = self._get_rc().clone().get_env_memory();
+
         let mut action_result: String = "".into();
         let mut cause_by: String = "".into();
 
         match self._get_action_by_state(action_state) {
             Some(action) => {
                 info!("【{}】action.run, will do  {:?}", self._get_profile(), action.name());
-                action_result = action.run(important_memory).await;
+                self._before_action(&env_msgs, &role_msgs);
+                action_result = action.run(role_msgs.iter().collect()).await;
                 cause_by = action.name().to_owned();
             },
             None => println!("error occurred"),
@@ -237,6 +259,7 @@ pub trait Role: Send + Sync {
             cause_by,
             ..Default::default()
         };
+        let msg = self._after_action(msg);
         // Store in the environment for all agents to see
         self._get_rc_env_memory().add(msg.clone());
         // Store in the Agent's memory

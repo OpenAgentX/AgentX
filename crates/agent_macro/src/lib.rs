@@ -36,18 +36,18 @@ fn impl_action_macro(ast: &syn::DeriveInput) -> TokenStream {
             /// 这里接收的是 所有信息，但是不是所有行为都会用到
             /// 有些只需要一条，所以使用条件有限制
             /// TODO 需要重新设计这里
-            async fn run(&self, msgs: Vec<Message>)-> String{
+            async fn run(&self, msgs: Vec<&Message>)-> String {
 
-                let prompt = self._build_prompt(&msgs).await;
+                let prompt = self._build_prompt(msgs.clone()).await;
                 debug!("{:?}", self);
                 info!("【{} Prompt】: \n {}", stringify!(#name), &prompt);
                 // 测试数据
                 if std::env::var("LLM_FAKE").is_ok() && std::env::var("LLM_FAKE").unwrap() == "true"  {
                     // return PROMPT_TEMPLATE_RESPONSE_SAMPLE_FULL.into();
-                    return self._post_processing(&msgs, PROMPT_TEMPLATE_RESPONSE_SAMPLE_FULL.into());
+                    return self._post_processing(msgs, PROMPT_TEMPLATE_RESPONSE_SAMPLE_FULL.into()).await;
                 }
                 let llm_response = self.aask(&prompt).await;
-                self._post_processing(&msgs, llm_response)
+                self._post_processing(msgs, llm_response).await
             }
         }
     };
@@ -126,6 +126,14 @@ fn impl_role_macro(ast: &syn::DeriveInput) -> TokenStream {
                 self._actions.len()
             }
 
+            fn _before_action(&self, env_msgs: &Vec<Message>,  role_msgs: &Vec<Message>) -> String {
+                self._before_action(env_msgs, role_msgs);
+                String::new()
+            }
+
+            fn _after_action(&self, message: Message) -> Message {
+                self._after_action(message)
+            }
         }
     };
     gen.into()

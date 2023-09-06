@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 use std::sync::{Mutex, Arc, MutexGuard};
 
+use agent_schema::Message;
 use async_trait::async_trait;
 use tracing::{debug};
 
@@ -42,5 +43,12 @@ impl QaEngineer {
         let desc = "desc";
         let constraints = "Thorough testing and bug reporting";
         QaEngineer::new(name, profile, goal, constraints, desc)
+    }
+
+    fn _before_action(&self, env_msgs: &Vec<Message>,  role_msgs: &Vec<Message>) -> String {
+        String::new()
+    }
+    fn _after_action(&self, message: Message) -> Message {
+        message
     }
 }

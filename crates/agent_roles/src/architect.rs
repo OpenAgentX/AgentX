@@ -1,8 +1,10 @@
 use std::collections::HashSet;
 use std::sync::{Mutex, Arc, MutexGuard};
 
+use agent_macro::RoleMacro;
+use agent_schema::Message;
 use async_trait::async_trait;
-use tracing::{info};
+use tracing::{info, debug};
 
 use agent_memory::Memory;
 use agent_actions::{Action, WriteDesign};
@@ -16,6 +18,7 @@ use crate::role::{Role, RoleContext, RoleSetting};
 // pub struct  Store;
 
 // #[derive(Clone, Debug)]
+#[derive(RoleMacro)]
 pub struct Architect {
     _llm: Arc<Mutex<LLM>>,
     _setting:  RoleSetting,
@@ -50,61 +53,20 @@ impl Architect {
         let constraints = "Try to specify good open source tools as much as possible";
         Architect::new(name, profile, goal, constraints, desc)
     }
-}
 
-#[async_trait]
-impl Role for Architect {
-
-    fn set_env_global_memory(&mut self, memory: Arc<Mutex<Memory>>) {
-        self._rc.env_memory = memory
-    }
-    
-    fn _reset(&mut self) {
-        self._states = vec![];
-        self._actions = vec![];
+    fn _before_action(&self, env_msgs: &Vec<Message>,  role_msgs: &Vec<Message>) {
+        info!(" {:?}", env_msgs);
     }
 
-    fn _init_actions(&mut self, actions: Vec<Box<dyn Action>>) {
-        self._reset();
-        for mut action in actions {
-            action.set_prefix(&self._setting.get_prefix(), &self._setting.profile);
-            self._actions.push(action);
-        }
-    }
+    fn _after_action(&self, message: Message) -> Message {
 
-    fn _watch(&mut self, _actions: Vec<Box<dyn Action>>) {
+        // CodeParser::new().parse_code("Competitive Quadrant Chart", &prd_text, "mermaid");
+        // let mermaid = CodeParser::new().parse_code("Competitive Quadrant Chart", &prd_text, "mermaid")
+        //     .expect("unable to parse mermaid code for Competitive Quadrant Chart");
+        // let _ = async_save_diagram(&mermaid, "workshop/CompetitiveQuadrantChart.png").await;
+        // prd_text
 
-    }
-    fn _set_state(&mut self, _state: i32) {
-        // let mut _rc = self._get_role_context();
-        // _rc.state = state;
-    }
-    fn _get_profile(&self) -> &str {
-        &self._setting.profile
-    }
-
-    fn _get_prefix(&self) -> String {
-       self._setting.get_prefix()
-    }
-
-    fn _get_states(&self) ->Vec<String> {
-        self._states.clone()
-    }
-    fn _get_rc(&self) -> RoleContext {
-        self._rc.clone()
-    }
-    fn _get_rc_env_memory(&self) -> MutexGuard<'_, Memory> {
-        self._rc.env_memory.lock().unwrap()
-    }
-    fn _get_rc_memory(&self) -> MutexGuard<'_, Memory> {
-        self._rc.role_memory.lock().unwrap()
-    }
-    fn _get_action_by_state(&self, state: usize) -> Option<&Box<dyn Action>> {
-        let Some(action) = self._actions.get(state) else { return None };
-        Some(action)
-    }
-
-    fn _get_action_count(&self) -> usize {
-        self._actions.len()
+        message
+        
     }
 }

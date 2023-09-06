@@ -60,17 +60,18 @@ impl WriteCode {
         }
     }
 
-    async fn _build_prompt(&self, msg: &Vec<Message>) -> String {
+    async fn _build_prompt(&self, msgs: Vec<&Message>) -> String {
         let template = PromptTemplate::new(PROMPT_TEMPLATE);
         let mut args = HashMap::new();
         // TODO 待优化
-        args.insert("context", msg[0].content.as_str());
+        args.insert("context", msgs[0].content.as_str());
         args.insert("filename", "main.py");
         template.render(&args)
     }
 
-    fn _post_processing(&self, _msgs: &Vec<Message>, llm_response: String) -> String {
+    async fn _post_processing(&self, _msgs: Vec<&Message>, llm_response: String) -> String {
         // info!("{}", _msgs[0].content.as_str());
+        // design = [i for i in context if i.cause_by == WriteDesign][0]
         // save_code
         let code = CodeParser::new().parse_code("main.py", &llm_response, "python").expect("code parsing error");
         info!("_post_processing \n {}", code);

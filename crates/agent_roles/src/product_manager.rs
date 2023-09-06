@@ -1,8 +1,9 @@
 use std::collections::HashSet;
 use std::sync::{Mutex, Arc, MutexGuard};
 
+use agent_schema::Message;
 use async_trait::async_trait;
-use tracing::{debug};
+use tracing::{debug, info};
 
 use agent_memory::Memory;
 use agent_actions::{Action, WritePRD};
@@ -46,4 +47,18 @@ impl ProductManager {
         let constraints = "";
         ProductManager::new(name, profile, goal, constraints, desc)
     }
+
+    fn _before_action(&self, env_msgs: &Vec<Message>,  role_msgs: &Vec<Message>) {
+        debug!("ProductManager\n env_msgs:\n {:?} \n role_msgs: \n {:?}", env_msgs, role_msgs);
+    }
+
+    fn _after_action(&self, message: Message) -> Message {
+        // info!("ProductManager\n env_msgs:\n {}", message.content);
+        // let mermaid = CodeParser::new().parse_code("Competitive Quadrant Chart", &prd_text, "mermaid")
+        //     .expect("unable to parse mermaid code for Competitive Quadrant Chart");
+        // let _ = async_save_diagram(&mermaid, "workshop/CompetitiveQuadrantChart.png").await;
+        // prd_text
+        message
+    }
+
 }

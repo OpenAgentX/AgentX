@@ -1,11 +1,12 @@
-use std::{collections::HashMap, sync::{Mutex, Arc}};
+use std::{collections::HashMap, sync::{Mutex, Arc}, fs, io::Write};
+use agent_utils::CodeParser;
 use async_trait::async_trait;
 use tracing::{debug, info};
 
 use agent_schema::Message;
 use agent_prompts::PromptTemplate;
 use crate::action_base::Action;
-
+use agent_macro::ActionMacro;
 pub use agent_provider::{LLM, LLMBase};
 
 
@@ -34,7 +35,7 @@ Attention: Use '##' to split sections, not '#', and '## <SECTION_NAME>' SHOULD W
 "#;
 
 
-#[derive(Debug)]
+#[derive(Debug, ActionMacro)]
 pub struct WriteTasks {
     _llm: Box<dyn LLMBase>,
     name: String,
@@ -54,44 +55,28 @@ impl WriteTasks {
         }
     }
 
-}
-
-#[async_trait]
-impl Action for WriteTasks {
-    fn name(&self) -> &str {
-        "WriteTasks"
-    }
-    fn set_prefix(&mut self, prefix: &str, profile: &str ){
-        self.prefix = prefix.into();
-        self.profile = profile.into();
-    }
-    fn get_prefix(&self) -> &str {
-        &self.prefix
-    }
-
-    async fn aask(&self, prompt: &str) -> String {
-        // "BossRequirement".to_owned()
-        // 获取互斥锁
-      self._llm.aask(prompt.into()).await
-        // 在锁定状态下执行异步操作
-    }
-
-    async fn run(&self, prompt: Vec<Message>)-> String {
+    async fn _build_prompt(&self, msgs: Vec<&Message>) -> String {
         let template = PromptTemplate::new(PROMPT_TEMPLATE);
         let mut args = HashMap::new();
         // TODO 待优化
-        args.insert("context", prompt[0].content.as_str());
+        args.insert("context", msgs[0].content.as_str());
         // args.insert("search_information", "");
         let prompt = template.render(&args); 
         // debug!("{:?}", self);
-        info!("【WriteTasks Prompt】: \n {}", prompt);
+        prompt
+    }
 
-        if std::env::var("LLM_FAKE").is_ok() && std::env::var("LLM_FAKE").unwrap() == "true"  {
-            return PROMPT_TEMPLATE_RESPONSE_SAMPLE_FULL.into();
+    async fn _post_processing(&self, _msgs: Vec<&Message>, llm_response: String) -> String {
+        {
+            let requirements = CodeParser::new().parse_code("Required Python third-party packages", &llm_response, "plaintext")
+                .expect("unable to parse mermaid code for Competitive Quadrant Chart");
+            let mut file = fs::File::create("workshop/requirements.txt").unwrap();
+            file.write_all(requirements.as_bytes()).expect("failed to write prd.md");
         }
-        self.aask(&prompt).await
+        llm_response
     }
 }
+
 
 const PROMPT_TEMPLATE_RESPONSE_SAMPLE1: &str = r#"
 Sure, let's fill in the missing information based on the context provided.

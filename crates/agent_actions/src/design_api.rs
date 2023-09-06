@@ -1,11 +1,14 @@
-use std::env;
+use std::io::Write;
+use std::{env, fs};
 use std::{collections::HashMap, sync::{Mutex, Arc}};
+use agent_utils::{CodeParser, async_save_diagram};
 use async_trait::async_trait;
 use tracing::{debug, info};
 
 use agent_schema::Message;
 use agent_prompts::PromptTemplate;
 use crate::action_base::Action;
+use agent_macro::ActionMacro;
 
 pub use agent_provider::{LLM, LLMBase};
 
@@ -76,7 +79,7 @@ The requirement is clear to me.
 ---
 "#;
 
-#[derive(Debug)]
+#[derive(Debug, ActionMacro)]
 pub struct WriteDesign {
     _llm: Box<dyn LLMBase>,
     name: String,
@@ -96,44 +99,47 @@ impl WriteDesign {
         }
     }
 
-}
-
-#[async_trait]
-impl Action for WriteDesign {
-    fn name(&self) -> &str {
-        "WriteDesign"
-    }
-    fn set_prefix(&mut self, prefix: &str, profile: &str ){
-        self.prefix = prefix.into();
-        self.profile = profile.into();
-    }
-    fn get_prefix(&self) -> &str {
-        &self.prefix
-    }
-
-    async fn aask(&self, prompt: &str) -> String {
-        // "BossRequirement".to_owned()
-        // 获取互斥锁
-      self._llm.aask(prompt.into()).await
-        // 在锁定状态下执行异步操作
-    }
-
-    async fn run(&self, prompt: Vec<Message>)-> String {
+    async fn _build_prompt(&self, msgs: Vec<&Message>) -> String {
         let template = PromptTemplate::new(PROMPT_TEMPLATE);
         let mut args = HashMap::new();
         // TODO 待优化
-        args.insert("context", prompt[0].content.as_str());
+        args.insert("context", msgs[0].content.as_str());
         args.insert("format_example", FORMAT_EXAMPLE);
         let prompt = template.render(&args); 
+        prompt
+    }
+    ///save prd.md and competitive_quadrant_chart.png
+    async fn _post_processing(&self, _msgs: Vec<&Message>, llm_response: String) -> String {
+        info!("【WriteDesign】 llm_response: {}", llm_response);
+        // save the prd.md and competitive_quadrant_chart.png
+        {
+            let mermaid = CodeParser::new().parse_code("Data structures and interface definitions", &llm_response, "mermaid")
+                .expect("unable to parse mermaid code for Data structures and interface definitions");
 
-        info!("【WriteDesign Prompt】: \n {}", prompt);
-
-        if env::var("LLM_FAKE").is_ok() && env::var("LLM_FAKE").unwrap() == "true"  {
-            return PROMPT_TEMPLATE_RESPONSE_SAMPLE_FULL.into();
+            let res = async_save_diagram(&mermaid, "workshop/Data_structures_and_interface_definitions.png").await;
+            if let Ok(_res) = res {
+                debug!("save mermaid:\n {}", mermaid);
+            } else {
+                info!("failed to save workshop/competitive_quadrant_chart.png :\n {}", mermaid);
+            }
         }
 
-        self.aask(&prompt).await
+        {
+            let mermaid = CodeParser::new().parse_code("Program call flow", &llm_response, "mermaid")
+            .expect("unable to parse mermaid code for Program call flow");
+
+            let res = async_save_diagram(&mermaid, "workshop/Program_call_flow.png").await;
+            if let Ok(_res) = res {
+                debug!("save mermaid:\n {}", mermaid);
+            } else {
+                info!("failed to save workshop/competitive_quadrant_chart.png :\n {}", mermaid);
+            }
+        }
+        let mut file = fs::File::create("workshop/ArchitectDesign.md").unwrap();
+        file.write_all(llm_response.as_bytes()).expect("failed to write prd.md");
+        llm_response
     }
+
 }
 
 // 测试数据
@@ -192,7 +198,8 @@ classDiagram
 ```
 
 ## Program call flow
-```sequenceDiagram
+```mermaid
+sequenceDiagram
 Player->SnakeGame: Start game
 SnakeGame->SnakeGame: Initialize game
 SnakeGame->Snake: Initialize snake

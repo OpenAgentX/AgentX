@@ -1,10 +1,11 @@
-use std::{collections::HashMap, sync::{Mutex, Arc}};
+use std::{collections::HashMap, sync::{Mutex, Arc}, fs, io::Write};
 use async_trait::async_trait;
 use tracing::{debug, info};
 
 use agent_schema::Message;
 use agent_prompts::PromptTemplate;
 use crate::action_base::Action;
+use agent_macro::ActionMacro;
 use agent_utils::{CodeParser, async_save_diagram};
 
 pub use agent_provider::{LLM, LLMBase};
@@ -58,7 +59,7 @@ ATTENTION: Use '##' to SPLIT SECTIONS, not '#'. AND '## <SECTION_NAME>' SHOULD W
 
 "#;
 
-#[derive(Debug)]
+#[derive(Debug, ActionMacro)]
 pub struct WritePRD {
     _llm: Box<dyn LLMBase>,
     name: String,
@@ -78,46 +79,31 @@ impl WritePRD {
         }
     }
 
-}
-
-#[async_trait]
-impl Action for WritePRD {
-    fn name(&self) -> &str {
-        "WritePRD"
-    }
-    fn set_prefix(&mut self, prefix: &str, profile: &str ){
-        self.prefix = prefix.into();
-        self.profile = profile.into();
-    }
-    fn get_prefix(&self) -> &str {
-        &self.prefix
-    }
-
-    async fn aask(&self, prompt: &str) -> String {
-        // "BossRequirement".to_owned()
-        // 获取互斥锁
-      self._llm.aask(prompt.into()).await
-        // 在锁定状态下执行异步操作
-    }
-
-    async fn run(&self, prompt: Vec<Message>)-> String {
+    async fn _build_prompt(&self, msgs: Vec<&Message>) -> String {
         let template = PromptTemplate::new(PROMPT_TEMPLATE);
         let mut args = HashMap::new();
         // TODO 待优化
-        args.insert("requirements", prompt[0].content.as_str());
+        args.insert("requirements", msgs[0].content.as_str());
         args.insert("search_information", "");
         let prompt = template.render(&args); 
-        debug!("{:?}", self);
-        info!("【WritePRD Prompt】: \n {}", prompt);
-        if std::env::var("LLM_FAKE").is_ok() && std::env::var("LLM_FAKE").unwrap() == "true"  {
-            PROMPT_TEMPLATE_RESPONSE_SAMPLE_FULL.to_string()
+        prompt
+    }
+    ///save prd.md and competitive_quadrant_chart.png
+    async fn _post_processing(&self, _msgs: Vec<&Message>, llm_response: String) -> String {
+        // info!("【WritePRD】 llm_response: {}", llm_response);
+        // save the prd.md and competitive_quadrant_chart.png
+        let mermaid = CodeParser::new().parse_code("Competitive Quadrant Chart", &llm_response, "mermaid")
+            .expect("unable to parse mermaid code for Competitive Quadrant Chart");
+        // debug!("mermaid:\n {}", mermaid);
+        let res = async_save_diagram(&mermaid, "workshop/competitive_quadrant_chart.png").await;
+        if let Ok(_res) = res {
+            debug!("save mermaid:\n {}", mermaid);
         } else {
-            self.aask(&prompt).await
+            info!("failed to save workshop/competitive_quadrant_chart.png :\n {}", mermaid);
         }
-        // let mermaid = CodeParser::new().parse_code("Competitive Quadrant Chart", &prd_text, "mermaid")
-        //     .expect("unable to parse mermaid code for Competitive Quadrant Chart");
-        // let _ = async_save_diagram(&mermaid, "workshop/CompetitiveQuadrantChart.png").await;
-        // prd_text
+        let mut file = fs::File::create("workshop/prd.md").unwrap();
+        file.write_all(llm_response.as_bytes()).expect("failed to write prd.md");
+        llm_response
     }
 }
 
