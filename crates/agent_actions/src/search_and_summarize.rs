@@ -128,7 +128,7 @@ impl SearchAndSummarize {
         }
     }
 
-    async fn _build_prompt(&self, msgs: &Vec<Message>) -> String {
+    async fn _build_prompt(&self, msgs: Vec<&Message>) -> String {
         let query = msgs[0].content.as_str();
         let rsp = self.search_engine.run(query).await;
 
@@ -150,7 +150,7 @@ impl SearchAndSummarize {
 
     }
 
-    fn _post_processing(&self, _msgs: &Vec<Message>, llm_response: String) -> String {
+    async fn _post_processing(&self, _msgs: Vec<&Message>, llm_response: String) -> String {
         // info!("{}", _msgs[0].content.as_str());
         // save_code
         let code = CodeParser::new().parse_code("main.py", &llm_response, "python").expect("code parsing error");
