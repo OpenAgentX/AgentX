@@ -12,7 +12,7 @@ use agent_memory::Memory;
 use crate::template::prefix_template;
 
 /// role setting for agent
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RoleSetting {
     pub name: String,
     pub profile: String,
