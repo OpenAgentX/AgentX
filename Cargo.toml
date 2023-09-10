@@ -12,6 +12,7 @@ dotenv.workspace = true
 anyhow.workspace = true
 tokio.workspace = true
 serde_yaml.workspace = true
+serde_json.workspace = true
 regex.workspace = true
 rust_mermaid.workspace = true
 
@@ -44,6 +45,8 @@ futures.workspace = true
 # test examples
 arxiv-rs.workspace = true
 reqwest.workspace = true
+url.workspace = true
+readability.workspace = true
 
 [workspace]
 resolver = "2"
@@ -86,7 +89,7 @@ config = "0.13.3"
 dotenv = "0.15.0"
 
 derivative = "2.2.0"
-
+nanoid = "0.4.0"
 regex = "1.9.3"
 lazy_static = "1.4.0"
 futures ="0.3.26"
@@ -101,13 +104,16 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["local-time"] }
 
 # for chatgpt 
-async-openai = "0.13.1"
+async-openai = "0.14.1"
 
 # for action
 readability = "0.2.0"
 rust_mermaid = "0.1.1"
 base64 = "0.21.2"
 reqwest = {version = "0.11.18", features = ["blocking"]}
+scraper = "0.15.0"
+url = "2.4.1"
+percent-encoding = "2.3.0"
 image = "0.24.6"
 arxiv-rs = "0.1.5"
 
