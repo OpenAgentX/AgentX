@@ -9,4 +9,7 @@ edition = "2021"
 serde.workshop = true
 serde_json.workshop = true
 tokio.workshop = true
+async-trait.workshop = true
 reqwest.workshop = true
+scraper.workshop = true
+readability.workshop = true
