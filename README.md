@@ -62,7 +62,7 @@ Following agent are implemented.
 | MetaGPT  | 🚧 |
 | AgentGPT  | 🚧 |
 | BabyAGI  | 🚧 |
-| ResearchGPT  | 🚧 |
+| GPT Researcher  | 🚧 |
 | CAMEL  | 🚧 |
 
 

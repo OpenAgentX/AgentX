@@ -6,15 +6,24 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+serde.workshop = true
+serde_json.workshop = true
+nanoid.workshop = true
+
 agent_actions.workspace = true
 agent_schema.workspace = true
 agent_memory.workspace = true
 agent_provider.workspace = true
+agent_tools.workspace = true
+agent_utils.workspace = true
+agent_prompts.workspace = true
 # 用户生成 role 
 # agent_roles_derive.workspace = true
 agent_macro.workspace = true
+async-openai.workspace = true
 
 # for role async-trait
+futures.workspace = true
 async-trait.workspace = true
 # termimad.workspace = true
 
