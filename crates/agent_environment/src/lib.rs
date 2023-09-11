@@ -65,3 +65,10 @@ impl Environment {
         self.roles.get(name)
     }
 }
+
+
+impl Default for Environment {
+    fn default() -> Self {
+        Self::new()
+    }
+}

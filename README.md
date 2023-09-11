@@ -98,4 +98,5 @@ For each **AI Agent** family, we provide an array of representative applications
 - [AgentGPT](https://github.com/reworkd/AgentGPT): Assemble, configure, and deploy autonomous AI Agents in your browser.
 - [BabyAGI](https://github.com/yoheinakajima/babyagi): This Python script is an example of an AI-powered task management system
 - [CAMEL](https://github.com/camel-ai/camel): 🐫 CAMEL: Communicative Agents for “Mind” Exploration of Large Scale Language Model Society
+- [GPT Researcher](https://github.com/assafelovic/gpt-researcher): GPT based autonomous agent that does online comprehensive research on any given topic
 - [ResearchGPT](https://github.com/mukulpatnaik/researchgpt): A LLM based research assistant that allows you to have a conversation with a research paper

@@ -1,6 +1,10 @@
 mod prompt_processing;
+// mod auto_agent_instructions;
+mod agent_prompt;
 
 pub use prompt_processing::PromptTemplate;
+pub use agent_prompt::AgentPrompt;
+// pub use auto_agent_instructions::{AutoAgentInstructions};
 
 
 
