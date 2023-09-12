@@ -1,4 +1,4 @@
-# **AgentX** 🚧
+# **AgentX**
 <p align="center">
   <em>🤖 : Empowering Multi-Agents, Crafting a Collaborative Future. 🤖   </em>
 </p>
@@ -59,10 +59,10 @@ Following agent are implemented.
 |  name   | Description |
 |  ----  | ----  |
 | AutoGPT  | 🚧 |
-| MetaGPT  | 🚧 |
+| MetaGPT  | ✅ |
 | AgentGPT  | 🚧 |
 | BabyAGI  | 🚧 |
-| GPT Researcher  | 🚧 |
+| GPT Researcher  | ✅ cargo run --example gpt_researcher -- --task `YOUR TASK` --report-type outline   |
 | CAMEL  | 🚧 |
 
 
