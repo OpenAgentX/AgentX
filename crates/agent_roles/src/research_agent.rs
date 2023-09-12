@@ -2,6 +2,7 @@ use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use std::collections::HashMap;
 
+use lazy_static::lazy_static;
 use tracing::{debug, info};
 use async_openai::types::ChatCompletionRequestMessage;
 use nanoid::nanoid;
@@ -21,6 +22,19 @@ use agent_utils::{
 use crate::role::{Role, RoleContext, RoleSetting};
 
 
+// type ReportPrompt = fn(&str, &str) -> String;
+
+// lazy_static! {
+//     static ref FUNCTION_MAP: HashMap<&'static str, ReportPrompt> = {
+//         let mut map = HashMap::new();
+//         map.insert("report_prompt", generate_report_prompt as ReportPrompt);
+//         map.insert("report_prompt", generate_resource_report_prompt as ReportPrompt);
+//         map.insert("report_prompt", generate_outline_report_prompt as ReportPrompt);
+//         map.insert("report_prompt", generate_concepts_prompt as ReportPrompt);
+//         map
+//     };
+// }
+
 #[derive(Default)]
 pub struct ResearchAgent {
     _llm: Arc<Mutex<LLM>>,
@@ -32,6 +46,7 @@ pub struct ResearchAgent {
     agent_role_prompt: String,
     question: String,
     directory_name: String,
+    search_num_urls: usize
 }
 
 impl ResearchAgent {
@@ -51,6 +66,7 @@ impl ResearchAgent {
             _states: vec![],
             _actions: vec![Box::new(action)],
             directory_name,
+            search_num_urls: 2,
             ..Default::default()
         }
     }
@@ -109,7 +125,7 @@ impl ResearchAgent {
             let collection: Vec<&str> = url.split("/").collect();
             let name = collection[collection.len() - 1];
             info!("async_browse pdf:\n {}", name);
-            let _ = download_pdf(url, name).await;
+            // let _ = download_pdf(url, name).await;
             info!("✅ pdf: {}", name);
             return "".to_string();
         }
@@ -147,9 +163,9 @@ impl ResearchAgent {
         );
         info!("{}", output);
         // self.websocket.send_json(&json!({"type": "logs", "output": output})).await.unwrap();
-
+        // TODO multi-threaded
         let mut tasks = Vec::new();
-        for url in &search_results {
+        for url in &search_results[0..self.search_num_urls] {
             let task = self.async_browse(&url.url).await;
             tasks.push(task);
         }
@@ -201,6 +217,23 @@ impl ResearchAgent {
 
         self.research_summary.clone()
     }
+
+    pub async fn write_report(&self, report_type: &str) -> String { 
+        let prompt = get_report_by_type(report_type)(&self.question, &self.research_summary);
+        let output = format!("✍️ Writing {} for research task: {}...", report_type, self.question);
+        info!("{}", &prompt);
+        info!("{}", &output);
+        let report = self.call_agent(&prompt, false).await;
+
+        let dir = format!("./outputs/{}/research_report.md", self.directory_name);
+        let dir_path = std::path::Path::new(&dir);
+        let parent_dir = dir_path.parent().unwrap();
+        std::fs::create_dir_all(parent_dir).unwrap();
+
+        let _ = write_to_file(&dir, &report);
+
+        prompt
+    } 
 }
 
 fn generate_agent_role_prompt(agent: &str) -> String {
