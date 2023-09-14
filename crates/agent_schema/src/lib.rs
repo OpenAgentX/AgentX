@@ -22,7 +22,7 @@ pub struct Message {
 impl Message {
 
     pub fn new(content: &str, role: &str, cause_by: &str, instruct_content: &str) -> Self {
-        Message {
+        Self {
             content: content.to_string(),
             role: role.to_string(),
             cause_by: cause_by.to_string(),
@@ -32,7 +32,7 @@ impl Message {
     }
 
     pub fn form(content: &str, role: &str, cause_by: &str, instruct_content: &str) -> Self {
-        Message {
+        Self {
             content: content.to_string(),
             role: role.to_string(),
             cause_by: cause_by.to_string(),

@@ -56,7 +56,7 @@ pub struct SearchArXiv {
 impl SearchArXiv {
     pub fn new(name: &str, context: &str, prefix:&str, profile: &str, _llm: Arc<Mutex<dyn LLMBase>>) -> Self {
 
-        SearchArXiv {
+        Self {
             _llm: Box::new(LLM::new()),
             name: name.into(),
             context: context.into(),

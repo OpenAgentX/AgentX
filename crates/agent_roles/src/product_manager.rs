@@ -31,7 +31,7 @@ impl ProductManager {
         let mut action = WritePRD::new(name, profile,&setting.get_prefix(), profile, llm.clone());
         action.set_prefix(&setting.get_prefix(), profile);
         // self.new(name, profile, goal, constraints)
-        ProductManager {
+        Self {
             _llm: llm,
             _setting: setting,
             _states: vec![],

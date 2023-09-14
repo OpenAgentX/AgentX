@@ -32,7 +32,7 @@ impl ProjectManager {
         let mut action = WriteTasks::new(name, profile,&setting.get_prefix(), profile, llm.clone());
         action.set_prefix(&setting.get_prefix(), profile);
 
-        ProjectManager {
+        Self {
             _llm: llm,
             _setting: setting,
             _states: vec![],

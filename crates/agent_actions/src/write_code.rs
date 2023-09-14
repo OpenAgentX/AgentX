@@ -51,7 +51,7 @@ pub struct WriteCode {
 impl WriteCode {
     pub fn new(name: &str, context: &str, prefix:&str, profile: &str, _llm: Arc<Mutex<dyn LLMBase>>) -> Self {
 
-        WriteCode {
+        Self {
             _llm: Box::new(LLM::new()),
             name: name.into(),
             context: context.into(),

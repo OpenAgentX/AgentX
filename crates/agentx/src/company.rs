@@ -17,7 +17,7 @@ impl SoftwareCompany {
     pub fn new(yaml_file: &str) -> Self {
         // let environment = Arc::new(Mutex::new(Environment::new()));
         let environment = Environment::new();
-        SoftwareCompany {
+        Self {
             environment,
             config: Config::new(yaml_file).unwrap(),
             investment: 0.0,

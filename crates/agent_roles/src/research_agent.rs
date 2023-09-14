@@ -60,7 +60,7 @@ impl ResearchAgent {
         action.set_prefix(&setting.get_prefix(), profile);
         // self.new(name, profile, goal, constraints)
         let directory_name = nanoid!(10);
-        ResearchAgent {
+        Self {
             _llm: llm,
             _setting: setting,
             _states: vec![],

@@ -22,7 +22,7 @@ impl Default for Memory {
 
 impl Memory {
     pub fn new() -> Self {
-        Memory {
+        Self {
             storage: Vec::new(),
             index: HashMap::new(),
         }

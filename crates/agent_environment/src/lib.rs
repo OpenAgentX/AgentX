@@ -19,7 +19,7 @@ pub struct Environment {
 impl Environment {
     pub fn new() -> Self {
         let (tx, _) = mpsc::channel(); // Adjust the channel size as needed
-        Environment {
+        Self {
             roles: HashMap::new(),
             message_queue: Arc::new(Mutex::new(tx)),
             memory:  Arc::new(Mutex::new(Memory::new())),

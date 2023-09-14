@@ -28,7 +28,7 @@ impl Default for CodeParser {
 
 impl CodeParser {
     pub fn new() -> Self {
-        CodeParser {
+        Self {
             text: String::new(),
         }
     }

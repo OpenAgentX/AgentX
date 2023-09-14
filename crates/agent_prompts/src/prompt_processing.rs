@@ -19,7 +19,7 @@ impl PromptTemplate {
     pub fn new(template: &str) -> Self {
         // let regex = Regex::new(r"\{\{([^}]*)\}\}").unwrap();
 
-        PromptTemplate {
+        Self {
             src: template.to_owned(),
             matches: PLACEHOLDER_MATCH_RE
                 .find_iter(template)

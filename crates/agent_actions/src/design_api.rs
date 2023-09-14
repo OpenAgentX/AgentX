@@ -90,7 +90,7 @@ pub struct WriteDesign {
 impl WriteDesign {
     pub fn new(name: &str, context: &str, prefix:&str, profile: &str, _llm: Arc<Mutex<dyn LLMBase>>) -> Self {
 
-        WriteDesign {
+        Self {
             _llm: Box::new(LLM::new()),
             name: name.into(),
             context: context.into(),

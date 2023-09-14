@@ -70,7 +70,7 @@ pub struct WritePRD {
 impl WritePRD {
     pub fn new(name: &str, context: &str, prefix:&str, profile: &str, _llm: Arc<Mutex<dyn LLMBase>>) -> Self {
 
-        WritePRD {
+        Self {
             _llm: Box::new(LLM::new()),
             name: name.into(),
             context: context.into(),

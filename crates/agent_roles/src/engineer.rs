@@ -36,7 +36,7 @@ impl Engineer {
         let mut action = WriteCode::new(name, profile,&setting.get_prefix(), profile, llm.clone());
         action.set_prefix(&setting.get_prefix(), profile);
         // self.new(name, profile, goal, constraints)
-        Engineer {
+        Self {
             _llm: llm,
             _setting: setting,
             _states: vec![],

@@ -46,7 +46,7 @@ pub struct WriteTasks {
 impl WriteTasks {
     pub fn new(name: &str, context: &str, prefix:&str, profile: &str, _llm: Arc<Mutex<dyn LLMBase>>) -> Self {
 
-        WriteTasks {
+      Self {
             _llm: Box::new(LLM::new()),
             name: name.into(),
             context: context.into(),

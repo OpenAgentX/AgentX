@@ -23,7 +23,7 @@ pub struct RoleSetting {
 
 impl RoleSetting {
     pub fn new(name: &str, profile: &str, goal: &str, constraints: &str, desc: &str) -> Self {
-        RoleSetting {
+        Self {
             name: name.to_string(),
             profile: profile.to_string(),
             goal: goal.to_string(),
@@ -50,7 +50,7 @@ impl RoleContext {
     pub fn new(watch: HashSet<String>) -> Self {
          // Initialize fields accordingly
         let state = 1;
-        RoleContext {
+        Self {
             env_memory: Arc::new(Mutex::new(Memory::new())),
             role_memory: Arc::new(Mutex::new(Memory::new())),
             state,

@@ -1,26 +1,27 @@
 #![warn(unused_variables)]
 use std::error::Error;
 
-use tracing::{info, debug};
+use tracing::{debug, info};
 
-use futures::StreamExt;
 use async_trait::async_trait;
+use futures::StreamExt;
 
 // use async_openai::config::OpenA/IConfig;
 use async_openai::{
-    types::{ChatCompletionRequestMessageArgs, CreateChatCompletionRequestArgs, Role, ChatCompletionRequestMessage},
     config::OpenAIConfig,
+    types::{
+        ChatCompletionRequestMessage, ChatCompletionRequestMessageArgs,
+        CreateChatCompletionRequestArgs, Role,
+    },
     Client,
 };
 
 // use agent_schema::Message;
 use crate::llmbase::LLMBase;
 
-
-
 #[derive(Debug)]
-pub struct OpenAIGPTAPI{
-    client: Client<OpenAIConfig>
+pub struct OpenAIGPTAPI {
+    client: Client<OpenAIConfig>,
 }
 #[async_trait]
 impl LLMBase for OpenAIGPTAPI {
@@ -45,14 +46,15 @@ impl Default for OpenAIGPTAPI {
 }
 
 impl OpenAIGPTAPI {
-
     pub fn new() -> Self {
         let client = Client::new();
-        OpenAIGPTAPI{client}
+        Self { client }
     }
 
-    pub async fn aask_with_role(&self, messages: Vec<ChatCompletionRequestMessage>) -> Result<String, Box<dyn Error>> {
-        
+    pub async fn aask_with_role(
+        &self,
+        messages: Vec<ChatCompletionRequestMessage>,
+    ) -> Result<String, Box<dyn Error>> {
         let request = CreateChatCompletionRequestArgs::default()
             .model(std::env::var("OPENAI_API_MODEL").unwrap_or("gpt-3.5-turbo".to_string()))
             // .max_tokens(4096u16)
@@ -95,7 +97,6 @@ impl OpenAIGPTAPI {
     }
 
     pub async fn aask(&self, content: &str) -> Result<String, Box<dyn Error>> {
-
         let request = CreateChatCompletionRequestArgs::default()
             .model(std::env::var("OPENAI_API_MODEL").unwrap_or("gpt-3.5-turbo".to_string()))
             // .max_tokens(4096u16)
@@ -139,5 +140,4 @@ impl OpenAIGPTAPI {
 
         Ok(rsp)
     }
-
 }

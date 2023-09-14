@@ -26,7 +26,7 @@ impl GoogleSearch {
         profile: &str,
         _llm: Arc<Mutex<dyn LLMBase>>,
     ) -> Self {
-        GoogleSearch {
+        Self {
             _llm: Box::new(LLM::new()),
             google_search: Box::new(GoogleSearchClient),
             name: name.into(),

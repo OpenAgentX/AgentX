@@ -118,7 +118,7 @@ pub struct SearchAndSummarize {
 impl SearchAndSummarize {
     pub fn new(name: &str, context: &str, prefix:&str, profile: &str, _llm: Arc<Mutex<dyn LLMBase>>) -> Self {
 
-        SearchAndSummarize {
+        Self {
             _llm: Box::new(LLM::new()),
             name: name.into(),
             context: context.into(),
