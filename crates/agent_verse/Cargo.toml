@@ -1,0 +1,21 @@
+[package]
+name = "agent_verse"
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait.workspace = true
+tokio.workspace = true
+uuid.workspace = true
+anyhow.workspace = true
+reqwest.workspace = true
+num_cpus.workspace = true
+# console-subscriber.workspace = true
+futures.workspace = true
