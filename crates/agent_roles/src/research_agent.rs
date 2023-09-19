@@ -2,10 +2,10 @@ use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use std::collections::HashMap;
 
-use lazy_static::lazy_static;
+// use lazy_static::lazy_static;
 use tracing::{debug, info};
 use async_openai::types::ChatCompletionRequestMessage;
-use nanoid::nanoid;
+use uuid::Uuid;
 use serde_json::json;
 
 use agent_schema::Message;
@@ -59,7 +59,7 @@ impl ResearchAgent {
             GoogleSearch::new(name, profile, &setting.get_prefix(), profile, llm.clone());
         action.set_prefix(&setting.get_prefix(), profile);
         // self.new(name, profile, goal, constraints)
-        let directory_name = nanoid!(10);
+        let directory_name = Uuid::new_v4().to_string();
         Self {
             _llm: llm,
             _setting: setting,

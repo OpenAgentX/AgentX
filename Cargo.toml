@@ -6,11 +6,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "4.3.21", features = ["derive"] }
+clap = { version = "4.4.3", features = ["derive"] }
 config.workspace = true
 dotenv.workspace = true
 anyhow.workspace = true
 tokio.workspace = true
+async-trait.workspace = true
 serde_yaml.workspace = true
 serde_json.workspace = true
 regex.workspace = true
@@ -29,6 +30,7 @@ agent_roles.workspace = true
 agent_schema.workspace = true
 agent_tools.workspace = true
 agent_utils.workspace = true
+agent_core.workspace = true
 agentx_core.workspace = true
 
 # agent_prompts.workspace = true
@@ -80,6 +82,7 @@ agent_roles =          { path = "crates/agent_roles", version = "*", default-fea
 agent_schema =         { path = "crates/agent_schema", version = "*", default-features = false }
 agent_tools =          { path = "crates/agent_tools", version = "*", default-features = false }
 agent_utils =          { path = "crates/agent_utils", version = "*", default-features = false }
+agent_core =           { path = "crates/agent_core", version = "*", default-features = false }
 agentx_core =          { path = "crates/agentx", version = "*", default-features = false }
 
 serde = { version = "1.0", features = ["derive"] }
@@ -89,7 +92,7 @@ config = "0.13.3"
 dotenv = "0.15.0"
 
 derivative = "2.2.0"
-nanoid = "0.4.0"
+uuid = {version = "1.4.1", features = ["v4", "fast-rng", "macro-diagnostics"]}
 regex = "1.9.3"
 lazy_static = "1.4.0"
 futures ="0.3.26"
@@ -106,18 +109,21 @@ tracing-subscriber = { version = "0.3", features = ["local-time"] }
 # for chatgpt 
 async-openai = "0.14.1"
 
+# for memory storage
+qdrant-client = "1.5.0"
+
 # for action
 readability = "0.2.0"
 rust_mermaid = "0.1.1"
 base64 = "0.21.2"
 reqwest = {version = "0.11.18", features = ["blocking"]}
-scraper = "0.15.0"
+scraper = "0.17.1"
 url = "2.4.1"
 percent-encoding = "2.3.0"
 image = "0.24.6"
 arxiv-rs = "0.1.5"
 
-termimad = "0.20"
+termimad = "0.25.2"
 
 [profile.release]
 # https://github.com/johnthagen/min-sized-rust

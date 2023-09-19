@@ -105,8 +105,7 @@ impl WriteDesign {
         // TODO 待优化
         args.insert("context", msgs[0].content.as_str());
         args.insert("format_example", FORMAT_EXAMPLE);
-        let prompt = template.render(&args); 
-        prompt
+        template.render(&args)
     }
     ///save prd.md and competitive_quadrant_chart.png
     async fn _post_processing(&self, _msgs: Vec<&Message>, llm_response: String) -> String {

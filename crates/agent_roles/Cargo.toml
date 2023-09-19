@@ -9,7 +9,7 @@ edition = "2021"
 serde.workspace = true
 serde_json.workspace = true
 lazy_static.workspace = true
-nanoid.workspace = true
+uuid.workspace = true
 
 agent_actions.workspace = true
 agent_schema.workspace = true
