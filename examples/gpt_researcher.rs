@@ -4,6 +4,7 @@ use agent_roles::{AgentRoleBuilder, ResearchAgent};
 use anyhow::Result;
 use clap::Parser;
 use clap::builder::TypedValueParser as _;
+use dotenv::dotenv;
 
 #[derive(clap::ValueEnum, Debug, Clone)] // ArgEnum here
 // #[clap(rename_all = "report_type")]
@@ -40,7 +41,7 @@ struct Args {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-
+    dotenv().ok();
     let args = Args::parse();
     tracing_subscriber::fmt()
         // enable everything
