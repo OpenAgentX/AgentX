@@ -30,7 +30,7 @@ agent_roles.workspace = true
 agent_schema.workspace = true
 agent_tools.workspace = true
 agent_utils.workspace = true
-# agent_core.workspace = true
+agent_verse.workspace = true
 agentx_core.workspace = true
 
 # agent_prompts.workspace = true
@@ -82,7 +82,7 @@ agent_roles =          { path = "crates/agent_roles", version = "*", default-fea
 agent_schema =         { path = "crates/agent_schema", version = "*", default-features = false }
 agent_tools =          { path = "crates/agent_tools", version = "*", default-features = false }
 agent_utils =          { path = "crates/agent_utils", version = "*", default-features = false }
-# agent_core =           { path = "crates/agent_core", version = "*", default-features = false }
+agent_verse =          { path = "crates/agent_verse", version = "*", default-features = false }
 agentx_core =          { path = "crates/agentx", version = "*", default-features = false }
 
 serde = { version = "1.0", features = ["derive"] }
@@ -99,7 +99,7 @@ futures ="0.3.26"
 anyhow = "1.0"
 async-trait = "0.1.73"
 tokio = { version = "1.31.0", features = ["full"] }
-
+num_cpus = "1.16.0"
 # for logging
 # chrono = "0.4.28"
 tracing = "0.1"
