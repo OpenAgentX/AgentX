@@ -75,6 +75,7 @@ While **AgentX** currently resides in the realm of beta, our comprehensive **[pu
 
 - ✅ **Rust**: [rust-lang](https://rust-lang.org) A language that empowers individuals to craft reliable and high-performance software.
 - ✅ **OpenAI**:🗃️ GPT instances for text generation
+- ✅ **[Code Interpreter](https://github.com/OpenAgentX/Code-Interpreter)**:🗃️ OpenAI's Code Interpreter running locally
 
 ## ✨ Demo 🚧
 For the most immersive demo experience, we invite you to explore [our dedicated site]() directly :)🚧
